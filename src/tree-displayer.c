@@ -4,37 +4,38 @@ int main(int argc, char * argv[]) {
   /* Programul principal - ReprezentareArbore */
   /* se iniţializează static tabela de chei */
 
-  strcpy(chei[1], "ARRAY");
-  strcpy(chei[2], "BEGIN");
-  strcpy(chei[3], "CASE");
-  strcpy(chei[4], "CONST");
-  strcpy(chei[5], "DIV");
-  strcpy(chei[6], "DOWNTO");
-  strcpy(chei[7], "DO");
-  strcpy(chei[8], "ELSE");
-  strcpy(chei[9], "END");
-  strcpy(chei[10], "FILE");
-  strcpy(chei[11], "FOR");
-  strcpy(chei[12], "FUNCTION");
-  strcpy(chei[13], "GOTO");
-  strcpy(chei[14], "IF");
-  strcpy(chei[15], "IN");
-  strcpy(chei[16], "LABEL");
-  strcpy(chei[17], "MOD");
-  strcpy(chei[18], "NIL");
-  strcpy(chei[19], "OF");
-  strcpy(chei[20], "PROCEDURE");
-  strcpy(chei[21], "PROGRAM");
-  strcpy(chei[22], "RECORD");
-  strcpy(chei[23], "REPEAT");
-  strcpy(chei[24], "SET");
-  strcpy(chei[25], "THEN");
-  strcpy(chei[26], "TO");
-  strcpy(chei[27], "TYPE");
-  strcpy(chei[28], "UNTIL");
-  strcpy(chei[29], "VAR");
-  strcpy(chei[30], "WHILE");
-  strcpy(chei[31], "WITH");
+  strcpy(chei[1], "auto");
+  strcpy(chei[2], "break");
+  strcpy(chei[3], "case");
+  strcpy(chei[4], "char");
+  strcpy(chei[5], "const");
+  strcpy(chei[6], "continue");
+  strcpy(chei[7], "default");
+  strcpy(chei[8], "do");
+  strcpy(chei[9], "double");
+  strcpy(chei[10], "else");
+  strcpy(chei[11], "enum");
+  strcpy(chei[12], "extern");
+  strcpy(chei[13], "float");
+  strcpy(chei[14], "for");
+  strcpy(chei[15], "goto");
+  strcpy(chei[16], "if");
+  strcpy(chei[17], "int");
+  strcpy(chei[18], "long");
+  strcpy(chei[19], "register");
+  strcpy(chei[20], "return");
+  strcpy(chei[21], "short");
+  strcpy(chei[22], "signed");
+  strcpy(chei[23], "sizeof");
+  strcpy(chei[24], "static");
+  strcpy(chei[25], "struct");
+  strcpy(chei[26], "switch");
+  strcpy(chei[27], "typedef");
+  strcpy(chei[28], "union");
+  strcpy(chei[29], "unsigned");
+  strcpy(chei[30], "void");
+  strcpy(chei[31], "volatile");
+  strcpy(chei[32], "while");
 
   for (int i = 1; i <= n; i++) {
     /* se inițializează a și b */
@@ -49,7 +50,7 @@ int main(int argc, char * argv[]) {
   /* se balează textul de intrare, se identifică cheile şi
   identificatorii şi se determină a şi b */
   if (argc != 2) {
-    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul cu cod sursa Pascal");
+    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul cu cod sursa C");
     exit(EXIT_FAILURE);
   }
   FILE * fis = fopen(argv[1], "r");
@@ -105,10 +106,14 @@ int main(int argc, char * argv[]) {
         ch = fgetc(fis);
       } while (ch != '\'');
     else
-    if (ch == '{')
+    if (ch == '\"')
+    do {
+        ch = fgetc(fis);
+    } while (ch != '\"');
+    if (ch == '/')
       do {
         ch = fgetc(fis);
-      } while (ch != '}');
+      } while (ch != '/');
   } while (ch != '$'); /* caracter sfârșit text sursă */
   fclose(fis);
   /* pentru fiecare cuvant cheie se afișează frecvențele a și b */

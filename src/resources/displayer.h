@@ -1,11 +1,11 @@
 #ifndef _DISPLAYERH_
 #define _DISPLAYERH_
 
-#define n 31
+#define n 32
 #define lch 10
 #define index n + 1
 #define pozLin ll
-#define ll 130 /* lățime linie de afișat */
+#define ll 150 /* lățime linie de afișat */
 
 typedef char alfa[lch];
 
