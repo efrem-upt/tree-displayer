@@ -10,6 +10,9 @@
 #define pozLin ll
 #define ll 130 /* lățime linie de afișat */
 
+#define true (1)
+#define false (0)
+
 typedef char alfa[lch];
 
 char ch;
@@ -36,6 +39,74 @@ nod;
 typedef nod * ref;
 
 FILE * fout;
+
+typedef unsigned char boolean;
+
+/*definire tip referinţă la un nod al cozii*/
+typedef struct tip_nod * tip_referinta_nod;
+/*definire tip nod al cozii*/
+typedef struct tip_nod {
+  ref element;
+  tip_referinta_nod urm;
+}
+tip_nod;
+
+/* Definirea structurii de date tip_coada}*/
+typedef struct tip_coada {
+  tip_referinta_nod inceput, spate;
+}
+tip_coada;
+
+void initializeaza(tip_coada * c)
+/*creaza coada vida c*/
+{
+  c -> inceput = (tip_nod * ) malloc(sizeof(tip_nod));
+  /*crează nodul fictiv*/
+  c -> inceput -> urm = NULL;
+  c -> spate = c -> inceput;
+  /*nodul fictiv este primul şi ultimul nod al cozii*/
+} /*initializeaza*/
+
+boolean vid(tip_coada c)
+/*returnează true dacă coada este vidă, false altfel*/
+{
+  boolean vid_result;
+  if (c.inceput == c.spate)
+    vid_result = true;
+  else vid_result = false;
+  return vid_result;
+} /*vid*/
+ref cap(tip_coada c)
+/*returnează elementul din capul cozii, sau semnalează eroare dacă coada este vidă*/
+{
+  ref cap_result;
+  if (vid(c)) {
+    return NULL;
+  } else
+    cap_result = c.inceput -> urm -> element;
+  return cap_result;
+} /*cap*/
+void adauga(ref x, tip_coada * c)
+/*adaugă un element la spatele cozii*/
+{
+  if (x != NULL) {
+    c -> spate -> urm = (tip_nod * ) malloc(sizeof(tip_nod));
+    /*se adaugă un nod nou la spatele cozii*/
+    c -> spate = c -> spate -> urm;
+    c -> spate -> element = x;
+    c -> spate -> urm = NULL;
+  }
+
+} /*adauga*/
+void scoate(tip_coada * c)
+/*suprimă primul element al cozii, sau semnalează eroare
+dacă coada este vidă*/
+{
+  if (vid( * c) == false) {
+    c -> inceput = c -> inceput -> urm;
+  }
+
+} /*scoate*/
 
 int DrumArbEch(int i, int j) {
   /* Generează în manieră recursivă matricea r corespunzătoare
@@ -110,24 +181,26 @@ void AfiseazaArbore() {
   drept parametri de intrare indicii i şi j care delimitează
   arborele de afişat */
 
-  ref radacina, curent, urm;
+  ref radacina;
+  tip_coada curent, urm;
   ref q, q1, q2;
   int i, k;
   int u, u1, u2, u3, u4;
 
   k = 0;
   radacina = Arbore(0, n, & k);
-  curent = radacina;
+  initializeaza( & curent);
+  adauga(radacina, & curent);
   radacina -> leg = NULL;
-  urm = NULL;
-
-  while (curent != NULL) {
+  initializeaza( & urm);
+  while (vid(curent) == false) {
     /* se afişează liniile verticale de legătură între
     niveluri pentru toate cuvintele din linia curentă */
     for (i = 1; i <= 3; i++) {
       u = 0;
-      q = curent;
+      tip_coada aux = curent;
       do {
+        q = cap(aux);
         int u1 = q -> poz;
         do {
           fprintf(fout, " ");
@@ -135,16 +208,18 @@ void AfiseazaArbore() {
         } while (u != u1);
         fprintf(fout, "I");
         u = u + 1;
-        q = q -> leg;
-      } while (q != NULL);
+        scoate( & aux);
+      } while (vid(aux) == false);
       fprintf(fout, "\n");
     }
+
     /* se afişează linia curentă; se determină descendenţii
     nodurilor din lista curent şi se formează lista
     rândului următor urm */
-    q = curent;
+
     u = 0;
     do {
+      q = cap(curent);
       int i = lch - 1;
       while (q -> cheie[i] == '\0') i = i - 1; /* lungime cheie */
       u2 = q -> poz - ((i - 1) / 2);
@@ -155,15 +230,13 @@ void AfiseazaArbore() {
         u1 = u2;
       else {
         u1 = q1 -> poz;
-        q1 -> leg = urm;
-        urm = q1;
+        adauga(q1, & urm);
       }
       if (q2 == NULL)
         u4 = u3;
       else {
         u4 = q2 -> poz + 1;
-        q2 -> leg = urm;
-        urm = q2;
+        adauga(q2, & urm);
       }
       i = -1;
       while (u < u1) {
@@ -183,18 +256,16 @@ void AfiseazaArbore() {
         fprintf(fout, "-");
         u = u + 1;
       }
-      q = q -> leg;
-    } while (q != NULL);
+      scoate( & curent);
+    } while (vid(curent) == false);
     fprintf(fout, "\n");
     /*se inversează lista urm și se face curentă*/
-    curent = NULL;
-    while (urm != NULL) {
-      q = urm;
-      urm = q -> leg;
-      q -> leg = curent;
-      curent = q;
+    initializeaza( & curent);
+    while (vid(urm) == false) {
+      q = cap(urm);
+      scoate( & urm);
+      adauga(q, & curent);
     }
-
   } /* WHILE */
 
 }
@@ -247,11 +318,8 @@ int main(int argc, char * argv[]) {
 
   /* se balează textul de intrare, se identifică cheile şi
   identificatorii şi se determină a şi b */
-  if (argc != 2) {
-        fprintf(stderr,"Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul cu cod sursa Pascal");
-        exit(EXIT_FAILURE);
-  }
-  FILE * fis = fopen(argv[1], "r");
+
+  FILE * fis = fopen("pascal.txt", "r");
   if (!fis) {
     fprintf(stderr, "Eroare la deschiderea fisierului de intrare\n");
     exit(EXIT_FAILURE);
