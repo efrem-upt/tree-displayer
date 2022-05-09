@@ -49,7 +49,7 @@ int main(int argc, char * argv[]) {
   /* se balează textul de intrare, se identifică cheile şi
   identificatorii şi se determină a şi b */
   if (argc != 2) {
-    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul cu cod sursa Pascal");
+    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul fisierului text cu cod sursa Pascal");
     exit(EXIT_FAILURE);
   }
   FILE * fis = fopen(argv[1], "r");
@@ -57,8 +57,11 @@ int main(int argc, char * argv[]) {
     fprintf(stderr, "Eroare la deschiderea fisierului de intrare\n");
     exit(EXIT_FAILURE);
   }
-
-  fout = fopen("rezultat.txt", "w");
+  char out[ffl + 1];
+  strcpy(out, argv[1]);
+  char * extension = strchr(out, '.');
+  strcpy(extension + 1, "txt");
+  fout = fopen(out, "w");
   if (!fout) {
     fprintf(stderr, "Eroare la crearea fisierului de iesire\n");
     exit(EXIT_FAILURE);
@@ -89,11 +92,11 @@ int main(int argc, char * argv[]) {
 
       do {
         k = (i + j) / 2;
-        if (strcmp(chei[k], id) <= 0) i = k + 1;
-        if (strcmp(chei[k], id) >= 0) j = k - 1;
+        if (stricmp(chei[k], id) <= 0) i = k + 1;
+        if (stricmp(chei[k], id) >= 0) j = k - 1;
       } while (i <= j);
 
-      if (strcmp(chei[k], id) == 0)
+      if (stricmp(chei[k], id) == 0)
         a[k] = a[k] + 1;
       else {
         k = (i + j) / 2;
@@ -104,8 +107,18 @@ int main(int argc, char * argv[]) {
       do {
         ch = fgetc(fis);
       } while (ch != '\'');
-    else
-    if (ch == '{')
+    else if (ch == '(') {
+                ch = fgetc(fis);
+                if (ch == '*') {
+                    do {
+                        do {
+                        ch = fgetc(fis);
+                        }while(ch != '*');
+                        ch = fgetc(fis);
+                    }while(ch != ')');
+                } else ungetc(ch, fis);
+        }
+    else if (ch == '{')
       do {
         ch = fgetc(fis);
       } while (ch != '}');
@@ -154,6 +167,6 @@ int main(int argc, char * argv[]) {
   fprintf(fout, "\n\n");
   fprintf(fout, "      arborele optim considerand numai cuvintele-cheie\n");
   AfiseazaArbore();
-  printf("Succes. Fisierul de iesire a fost creat si poate fi vizualizat: rezultat.txt");
+  printf("Succes. Fisierul de iesire a fost creat si poate fi vizualizat: %s", out);
   return 0;
 }

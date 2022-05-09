@@ -1,36 +1,38 @@
 #ifndef _DISPLAYERH_
 #define _DISPLAYERH_
 
-#define n 31
-#define lch 10
-#define index n + 1
+#define n (31) /* numar chei */
+#define lch (10) /* lungime maxima cuvant cheie */
+#define index (n + 1) /* dimensiune tablouri de chei */
 #define pozLin ll
-#define ll 130 /* lățime linie de afișat */
+#define ll (130) /* lățime linie de afișat */
+#define ffl (100) /* lungime path fisier intrare */
 
-typedef char alfa[lch];
-
-char ch;
-int k1, k2; // identificator sau cheie
-alfa id = {}; /* identificator sau cheie */
-alfa chei[n + 1];
-int i, j, k;
-int a[n + 1];
-int b[index];
-int p[index][index], w[index][index];
-int r[index][index];
-int r[index][index];
-int suma, sumb;
-char litere[53];
-char cifre[11];
+typedef char alfa[lch]; /* tip de date string[lch] */
 
 typedef struct ref {
   alfa cheie;
-  int poz;
-  struct ref * sting, * drept, * leg;
+  int poz; /* pozitia pe rand a cheii */
+  struct ref * sting, * drept;
 }
 nod;
 
 typedef nod * ref;
+
+char ch;
+int k1, k2;
+alfa id = {}; /* identificator sau cheie */
+alfa chei[index]; /* tablou de indentificatori / chei */
+int i, j, k;
+int a[index]; /*tablou frecvente chei*/
+int b[index]; /*tablou frecvente interchei*/
+int p[index][index]; /*matrice lungimi drumuri ponderate*/
+int w[index][index]; /*matrice ponderi arbori optimi*/
+int r[index][index]; /*matrice radacini arbori optimi*/
+int suma; /* suma frecvente chei */
+int sumb; /* suma frecvente interchei */
+char litere[53]; /* literele alfabetului englez mari si mici */
+char cifre[11]; /* cifrele de la 0..9 */
 
 int DrumArbEch(int i, int j);
 /* Generează în manieră recursivă matricea r corespunzătoare
@@ -52,5 +54,7 @@ void AfiseazaArbore();
 /* Realizează afişarea efectivă a structurii arborelui şi are
   drept parametri de intrare indicii i şi j care delimitează
   arborele de afişat */
+void eliberare(ref rad);
+/* elimina memoria alocata stocarii dinamice a arborelui */
 
 #endif // displayer

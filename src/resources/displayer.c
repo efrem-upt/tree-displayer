@@ -8,29 +8,35 @@ FILE * fout; /* fisier de iesire */
 
 int DrumArbEch(int i, int j) {
   int k;
-  k = (i + j + 1) / 2;
+  k = (i + j + 1) / 2; /* indicele cuvantului cheie din mijloc */
   r[i][j] = k; /* k este cheia mediană */
-  if (i >= j)
-    return b[k];
-  else return DrumArbEch(i, k - 1) + DrumArbEch(k, j) + w[i][j];
+  if (i >= j) /* daca nodul curent este extern */
+    return b[k]; /* returnam frecventa aparitiei nodului extern */
+  else return DrumArbEch(i, k - 1) + DrumArbEch(k, j) + w[i][j]; /* apel recursiv pe toti subarborii */
 } /* DrumArbEch */
 
 void ArbOpt() {
   int x, min;
   int i, j, k, h, m;
-
+  /*Construcţia arborilor optimi de lăţime h=0*/
   for (i = 0; i <= n; i++)
     p[i][i] = w[i][i];
+  /*Construcţia arborilor optimi de lăţime h=1*/
   for (i = 0; i <= n - 1; i++) {
     j = i + 1;
     p[i][j] = p[i][i] + p[j][j] + w[i][j];
     r[i][j] = j;
   }
+  /*Construcţia arborilor optimi de lăţime h > 1*/
   for (h = 2; h <= n; h++) {
     for (i = 0; i <= n - h; i++) {
       j = i + h;
       m = r[i][j - 1];
       min = p[i][m - 1] + p[m][j];
+      /* găseşte acel indice m care conduce la o valoare
+      minimă al lui min. min se determină cu relaţia
+      min = minim(p[i,m-1]+p[m,j]), dintre toţi indicii
+      m care satisfac relaţia r[i,j-1]<=m<=r[i+1,j] */
       for (k = m + 1; k <= r[i + 1][j]; k++) {
         x = p[i][k - 1] + p[k][j];
         if (x < min) {
@@ -66,11 +72,10 @@ void AfiseazaArbore() {
   int u, u1, u2, u3, u4;
 
   k = 0;
-  radacina = Arbore(0, n, & k);
-  initializeaza( & curent);
+  radacina = Arbore(0, n, & k); /* creare arbore */
+  initializeaza( & curent); /* initializare coada curent */
   adauga(radacina, & curent);
-  radacina -> leg = NULL;
-  initializeaza( & urm);
+  initializeaza( & urm); /* initializare coada urm */
   while (vid(curent) == false) {
     /* se afişează liniile verticale de legătură între
     niveluri pentru toate cuvintele din linia curentă */
@@ -100,7 +105,7 @@ void AfiseazaArbore() {
       q = cap(curent);
       int i = lch - 1;
       while (q -> cheie[i] == '\0') i = i - 1; /* lungime cheie */
-      u2 = q -> poz - ((i - 1) / 2);
+      u2 = q -> poz - (i / 2);
       u3 = u2 + i + 1;
       q1 = q -> sting;
       q2 = q -> drept;
@@ -145,5 +150,16 @@ void AfiseazaArbore() {
       adauga(q, & curent);
     }
   } /* WHILE */
+    eliberare(radacina); /* eliberare memorie arbore */
+}
+
+void eliberare(ref rad) {
+    if (rad) {
+        ref aux_stg = rad->sting;
+        ref aux_dr = rad->drept;
+        free(rad); /* eliberare memorie arbore curent */
+        eliberare(aux_stg); /* eliberare memorie arbore drept */
+        eliberare(aux_dr); /* eliberare memorie arbore stang */
+    }
 
 }
