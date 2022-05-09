@@ -49,8 +49,9 @@ int main(int argc, char * argv[]) {
 
   /* se balează textul de intrare, se identifică cheile şi
   identificatorii şi se determină a şi b */
-  if (argc != 2) {
-    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul cu cod sursa C");
+
+ if (argc != 2) {
+    fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul fisierului text cu cod sursa C");
     exit(EXIT_FAILURE);
   }
   FILE * fis = fopen(argv[1], "r");
@@ -58,8 +59,11 @@ int main(int argc, char * argv[]) {
     fprintf(stderr, "Eroare la deschiderea fisierului de intrare\n");
     exit(EXIT_FAILURE);
   }
-
-  fout = fopen("rezultat.txt", "w");
+  char out[ffl + 1];
+  strcpy(out, argv[1]);
+  char * extension = strchr(out, '.');
+  strcpy(extension + 1, "txt");
+  fout = fopen(out, "w");
   if (!fout) {
     fprintf(stderr, "Eroare la crearea fisierului de iesire\n");
     exit(EXIT_FAILURE);
@@ -110,10 +114,23 @@ int main(int argc, char * argv[]) {
     do {
         ch = fgetc(fis);
     } while (ch != '\"');
-    if (ch == '/')
+    else if (ch == '/') {
+        ch = fgetc(fis);
+      if (ch == '/')
       do {
         ch = fgetc(fis);
-      } while (ch != '/');
+      }while(ch != '\n');
+      else {
+        ungetc(ch, fis);
+        do {
+        ch = fgetc(fis);
+        } while (ch != '/');
+       }
+    } else if (ch == '#')
+        do  {
+            ch = fgetc(fis);
+        }while(ch != '\n');
+
   } while (ch != '$'); /* caracter sfârșit text sursă */
   fclose(fis);
   /* pentru fiecare cuvant cheie se afișează frecvențele a și b */
@@ -159,6 +176,6 @@ int main(int argc, char * argv[]) {
   fprintf(fout, "\n\n");
   fprintf(fout, "      arborele optim considerand numai cuvintele-cheie\n");
   AfiseazaArbore();
-  printf("Succes. Fisierul de iesire a fost creat si poate fi vizualizat: rezultat.txt");
+  printf("Succes. Fisierul de iesire a fost creat si poate fi vizualizat: %s", out);
   return 0;
 }
