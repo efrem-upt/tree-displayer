@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
         }
 
         ch = fgetc(fis);
-      } while (strchr(litere, ch) || strchr(cifre, ch));
+      } while (strchr(litere, ch) || strchr(cifre, ch) || ch == '_');
 
       if (k1 >= k2)
         k2 = k1;
@@ -88,7 +88,7 @@ int main(int argc, char * argv[]) {
           id[k2] = '\0';
           k2 = k2 - 1;
         } while (k2 != k1);
-      i = 1, j = n;
+      i = 0, j = n - 1;
 
       do {
         k = (i + j) / 2;
@@ -106,22 +106,22 @@ int main(int argc, char * argv[]) {
     if (ch == '\'')
       do {
         ch = fgetc(fis);
-      } while (ch != '\'');
+      } while (ch != '\'' && ch != EOF);
     else if (ch == '(') {
                 ch = fgetc(fis);
                 if (ch == '*') {
                     do {
                         do {
                         ch = fgetc(fis);
-                        }while(ch != '*');
+                        }while(ch != '*' && ch != EOF);
                         ch = fgetc(fis);
-                    }while(ch != ')');
+                    }while(ch != ')' && ch != EOF);
                 } else ungetc(ch, fis);
         }
     else if (ch == '{')
       do {
         ch = fgetc(fis);
-      } while (ch != '}');
+      } while (ch != '}' && ch != EOF);
   } while (ch != '$'); /* caracter sfârșit text sursă */
   fclose(fis);
   /* pentru fiecare cuvant cheie se afișează frecvențele a și b */
