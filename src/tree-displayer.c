@@ -36,7 +36,6 @@ int main(int argc, char * argv[]) {
   strcpy(chei[30], "void");
   strcpy(chei[31], "volatile");
   strcpy(chei[32], "while");
-
   for (int i = 1; i <= n; i++) {
     /* se inițializează a și b */
     a[i] = 0;
@@ -50,7 +49,7 @@ int main(int argc, char * argv[]) {
   /* se balează textul de intrare, se identifică cheile şi
   identificatorii şi se determină a şi b */
 
- if (argc != 2) {
+  if (argc != 2) {
     fprintf(stderr, "Formatarea argumentelor incorecta. Programul accepta un singur argument care este path-ul fisierul fisierului text cu cod sursa C");
     exit(EXIT_FAILURE);
   }
@@ -68,7 +67,6 @@ int main(int argc, char * argv[]) {
     fprintf(stderr, "Eroare la crearea fisierului de iesire\n");
     exit(EXIT_FAILURE);
   }
-
   do {
 
     ch = fgetc(fis);
@@ -81,7 +79,7 @@ int main(int argc, char * argv[]) {
         }
 
         ch = fgetc(fis);
-      } while (strchr(litere, ch) || strchr(cifre, ch));
+      } while (strchr(litere, ch) || strchr(cifre, ch) || ch == '_');
 
       if (k1 >= k2)
         k2 = k1;
@@ -108,30 +106,30 @@ int main(int argc, char * argv[]) {
     if (ch == '\'')
       do {
         ch = fgetc(fis);
-      } while (ch != '\'');
+      } while (ch != '\'' && ch != EOF);
     else
     if (ch == '\"')
     do {
         ch = fgetc(fis);
-    } while (ch != '\"');
+    } while (ch != '\"' && ch != EOF);
     else if (ch == '/') {
         ch = fgetc(fis);
       if (ch == '/')
       do {
         ch = fgetc(fis);
-      }while(ch != '\n');
-      else {
+      }while(ch != '\n' && ch != EOF);
+      else if (ch == '*') {
         ungetc(ch, fis);
         do {
         ch = fgetc(fis);
-        } while (ch != '/');
+        } while (ch != '/' && ch != EOF);
        }
     } else if (ch == '#')
         do  {
             ch = fgetc(fis);
-        }while(ch != '\n');
+        }while(ch != '\n' && ch != EOF);
 
-  } while (ch != '$'); /* caracter sfârșit text sursă */
+  } while (ch != EOF); /* caracter sfârșit text sursă */
   fclose(fis);
   /* pentru fiecare cuvant cheie se afișează frecvențele a și b */
   fprintf(fout, "Cuvintele cheie si frecventele lor de aparitie\n");
