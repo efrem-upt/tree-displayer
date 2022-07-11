@@ -15,4 +15,6 @@ To view the result file, simply access source.txt on your system. The file will 
 
 ## Demo
 
-![hippo](https://lh6.googleusercontent.com/Bt7gHge31AQg9gprnRraiN1P5HNByjIaRgdynpMeFaXtqVGhuniZQA4vdFhyoVUFWkqBpb83-HC7n5_QRDXC=w1920-h932-rw)
+<p align="center">
+  <img src="docs/tree-displayer-c-demo.gif" width = "800" height = "500">
+</p>
