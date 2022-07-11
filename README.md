@@ -15,4 +15,6 @@ To view the result file, simply access source.txt on your system. The file will 
 
 ## Demo
 
-![hippo](https://lh5.googleusercontent.com/muM68TJ9lEaPwUds5vsNW6w-UdD4MmeyOqS3MH2nOADxMtmXCXvoUnD13DhcNsG0ofjFF-HsCrUvfsE2ehgx=w1920-h932-rw)
+<p align="center">
+  <img src="docs/Demo.gif" width = "600" height = "500">
+</p>
