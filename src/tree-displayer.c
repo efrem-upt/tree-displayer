@@ -99,6 +99,7 @@ int main(int argc, char * argv[]) {
       if (stricmp(chei[k], id) == 0)
         a[k] = a[k] + 1;
       else {
+        printf("%s\n",id);
         k = (i + j) / 2;
         b[k] = b[k] + 1;
       }
@@ -122,6 +123,15 @@ int main(int argc, char * argv[]) {
       do {
         ch = fgetc(fis);
       } while (ch != '}' && ch != EOF);
+    else if (ch == '/') {
+        ch = fgetc(fis);
+        if (ch == '/')
+            do {
+                ch = fgetc(fis);
+            } while (ch != '\n' && ch != '$' && ch != EOF);
+        else ungetc(ch, fis);
+
+    }
   } while (ch != '$'); /* caracter sfârșit text sursă */
   fclose(fis);
   /* pentru fiecare cuvant cheie se afișează frecvențele a și b */
