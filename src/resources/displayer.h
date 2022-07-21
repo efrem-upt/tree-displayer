@@ -2,11 +2,11 @@
 #define _DISPLAYERH_
 
 #define n (32) /* numar chei */
-#define lch (10) /* lungime maxima cuvant cheie */
+#define lch (247) /* lungime maxima cuvant cheie */
 #define index (n + 1) /* dimensiune tablouri de chei */
 #define pozLin ll
 #define ll (150) /* lățime linie de afișat */
-#define ffl (100) /* lungime path fisier intrare */
+#define ffl (300) /* lungime path fisier intrare */
 
 typedef char alfa[lch]; /* tip de date string[lch] */
 
