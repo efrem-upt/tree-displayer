@@ -1,5 +1,9 @@
 # tree-displayer
-C program that reads a Pascal source file, creates the optimal binary search tree with reserved Pascal keywords (succesful and unsuccesful search) by dynamic approach and prints out the tree on the screen in a sequential and discrete way. Small project made during my second year of Computer Engineering studies at Polytechnic University of Timișoara
+C program that reads a Pascal source file, creates the optimal binary search tree with reserved Pascal keywords (succesful and unsuccesful search) by dynamic approach and prints out the tree on the screen in a sequential and discrete way. Small project made for the Design and analysis of algorithms (RO) course during my second year of Computer Engineering studies at Polytechnic University of Timișoara.
+
+<p align="center">
+  <img src="https://github.com/dragosefrem/tree-displayer/blob/main/docs/rounded_logo.png" width = "200" height = "200">
+</p>
 
 ## Running the program
 
