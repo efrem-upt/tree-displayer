@@ -99,7 +99,6 @@ int main(int argc, char * argv[]) {
       if (stricmp(chei[k], id) == 0)
         a[k] = a[k] + 1;
       else {
-        printf("%s\n",id);
         k = (i + j) / 2;
         b[k] = b[k] + 1;
       }
