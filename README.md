@@ -23,3 +23,7 @@ To view the result file, simply access source.txt on your system. The file will 
 <p align="center">
   <img src="docs/tree-displayer-pascal-demo.gif" width = "800" height = "500">
 </p>
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
